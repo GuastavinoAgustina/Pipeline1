@@ -37,7 +37,7 @@ jobs:
      - uses: actions/checkout@v3
      - run: sed -i -e 's/\r$//' cond.sh
      - run: chmod +x cond.sh
-     - run: ./cond.sh ${{secrets.PASSWORD}} ${{secrets.USUARIO}} 
+     - run: ./cond.sh ${{ secrets.PASSWORD }} ${{ secrets.USUARIO }} 
      - uses: actions/upload-artifact@v3
        with:
          name: log
