@@ -1,0 +1,51 @@
+on:  
+ push: [ main ]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps: 
+     - uses: actions/checkout@v3
+     - run: pip install flake8 pylint
+     - run: flake8 main.py
+     - run: pylint main.py
+  test:
+    needs: [ lint ]
+    runs-on: ubuntu-latest
+    steps: 
+     - uses: actions/checkout@v3
+     - run: python -m unittest --verbose --failfast
+  artifact:
+    needs: [ test]
+    runs-on: ubuntu-latest
+    steps: 
+     - run: actions/checkout@v3
+     - run: python main.py
+     - uses: actions/upload-artifact@v3
+       with:
+         name: app
+         path: build/index.html
+  descargar:
+    needs: [artifact]
+    runs-on: ubuntu-latest
+    steps:
+     - uses: actions/download-artifact@v3
+       with:
+         name: app
+     - uses: actions/checkout@v3
+     - run: sed -i -e 's/\r$//' cond.sh
+     - run: chmod +x cond.sh
+     - run: ./cond.sh ${{secrets.PASSWORD}} ${{secrets.USUARIO}} 
+     - uses: actions/upload-artifact@v3
+       with:
+         name: log
+         path: ./deploy.log
+
+
+
+
+
+  
+
+
+
