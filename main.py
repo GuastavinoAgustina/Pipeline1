@@ -16,3 +16,7 @@ def main():
         <p>Nuevo archivo html</p>
         </body>
         </html>''')
+
+
+if __name__ == '__main__':
+    main()
